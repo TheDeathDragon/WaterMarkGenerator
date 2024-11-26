@@ -8,15 +8,15 @@ from FileUtil import save_last_opened_path
 
 
 class DetailWindow(QDialog):
-    def __init__(self, _):
+    def __init__(self, app, path):
         super().__init__()
-
+        self.app = app
         self.setWindowFlags(Qt.WindowMinimizeButtonHint |
                             Qt.WindowMaximizeButtonHint |
                             Qt.WindowCloseButtonHint)
 
-        print("参数传递路径 > ", _)
-        self.path = _
+        print("参数传递路径 >", path)
+        self.path = path
         self.setWindowTitle("当前路径 > " + self.path)
 
         # 创建主窗口布局
@@ -112,6 +112,10 @@ class DetailWindow(QDialog):
         self.open_log_folder()
         self.reset_button.setEnabled(True)
 
+    def set_clipboard_text(self):
+        clipboard = self.app.clipboard()
+        clipboard.setText("alps/vendor/mediatek/proprietary/hardware/mtkcam3/3rdparty/customer/cp_watermark/")
+
     def change_color(self):
         colors = ["#FF0000", "#00FF00", "#0000FF", "#D3D3D3", "#A9A9A9", "#FFFFFF", "#000000"]
         self.image_preview.setStyleSheet(f"background-color: {colors[self.color_index]};")
@@ -140,7 +144,8 @@ class DetailWindow(QDialog):
     def save_header_file(self):
         # 保存头文件
         WaterMarkUtil.yuv_to_header_file(self.path, self.slider.value() * 255 // 100)
-        self.show_info_message("头文件保存在图片同目录下的 yuv_img_para.h 文件中")
+        self.set_clipboard_text()
+        self.show_info_message("头文件保存在图片同目录下的 yuv_img_para.h 文件中\n同时已将服务器路径复制到剪贴板")
 
     def show_info_message(self, info):
         msg_box = QMessageBox(self)

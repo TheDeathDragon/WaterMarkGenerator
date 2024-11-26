@@ -11,7 +11,7 @@ from WaterMarkDetail import DetailWindow
 
 
 class MainWindow(QWidget):
-    def __init__(self):
+    def __init__(self, _):
         super().__init__()
         self.QSpacerItem: QSpacerItem = None
         self.file_group_box: QGroupBox = None
@@ -19,6 +19,7 @@ class MainWindow(QWidget):
         self.line_edit_log_path: QLineEdit = None
         self.analyze_button: QPushButton = None
         self.open_folder_button: QPushButton = None
+        self.app = _
         self.init()
 
     def init(self):
@@ -54,12 +55,12 @@ class MainWindow(QWidget):
         file_layout.addItem(self.QSpacerItem)
 
         # 添加按钮
-        self.open_folder_button = QPushButton('打开水印图片', self)
+        self.open_folder_button = QPushButton('选择水印图片', self)
         self.open_folder_button.setFixedHeight(40)
         self.open_folder_button.clicked.connect(self.open_log_folder)
         button_layout.addWidget(self.open_folder_button)
 
-        self.analyze_button = QPushButton('开始转换', self)
+        self.analyze_button = QPushButton('开始编辑', self)
         self.analyze_button.setFixedHeight(40)
         self.analyze_button.clicked.connect(self.start_generate)
         button_layout.addWidget(self.analyze_button)
@@ -91,7 +92,7 @@ class MainWindow(QWidget):
             self.analyze_button.setEnabled(True)
             self.line_edit_log_path.setEnabled(True)
             return
-        detail_window = DetailWindow(image_path)
+        detail_window = DetailWindow(app, image_path)
         detail_window.exec_()
 
         self.analyze_button.setEnabled(True)
@@ -110,6 +111,6 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     font = QFont("Microsoft YaHei UI", 10)
     app.setFont(font)
-    window = MainWindow()
+    window = MainWindow(app)
     window.show()
     sys.exit(app.exec_())
