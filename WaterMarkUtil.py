@@ -96,7 +96,9 @@ struct hct_water_mark_param {
 
     print("水印图片规格：", width, "x", height)
 
-    with open('yuv_img_para.h', 'w', newline='\n') as file:
+    file_name = 'yuv_img_para.h'
+    full_file_name = file_path[:file_path.rfind('/')] + '/' + file_name
+    with open(full_file_name, 'w', newline='\n') as file:
         file.write(file_header_0)
         file.write(file_header_1)
         file.write(file_header_2)
