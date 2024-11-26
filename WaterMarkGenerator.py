@@ -5,6 +5,7 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import QApplication, QVBoxLayout, QPushButton, QLineEdit, QHBoxLayout, \
     QWidget, QFileDialog, QMessageBox, QGroupBox, QSizePolicy, QSpacerItem
 
+import FileUtil
 import WaterMarkUtil
 from FileUtil import load_last_opened_path, save_last_opened_path
 from WaterMarkDetail import DetailWindow
@@ -24,7 +25,7 @@ class MainWindow(QWidget):
 
     def init(self):
         self.setWindowTitle("MTK 平台相机水印生成 > Build 241126")
-        self.setWindowIcon(QIcon("favicon.ico"))
+        self.setWindowIcon(QIcon(FileUtil.getRealPath(r'\favicon.ico')))
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
 
         # 设置窗口大小
@@ -112,6 +113,8 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     font = QFont("Microsoft YaHei UI", 10)
     app.setFont(font)
+    real_path = FileUtil.getRealPath(r'\favicon.ico')
+    app.setWindowIcon(QIcon(real_path))
     window = MainWindow(app)
     window.show()
     sys.exit(app.exec_())

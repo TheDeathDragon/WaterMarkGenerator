@@ -3,6 +3,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QSlider, QPushButton, QLabel, QGroupBox, \
     QFileDialog, QMessageBox, QDialog
 
+import FileUtil
 import WaterMarkUtil
 from FileUtil import save_last_opened_path
 
@@ -11,12 +12,12 @@ class DetailWindow(QDialog):
     def __init__(self, app, path):
         super().__init__()
         self.app = app
-        self.setWindowIcon(QIcon("favicon.ico"))
+        real_path = FileUtil.getRealPath(r'\favicon.ico')
+        self.setWindowIcon(QIcon(real_path))
         self.setWindowFlags(Qt.WindowMinimizeButtonHint |
                             Qt.WindowMaximizeButtonHint |
                             Qt.WindowCloseButtonHint)
 
-        print("参数传递路径 >", path)
         self.path = path
         self.setWindowTitle("当前路径 > " + self.path)
 

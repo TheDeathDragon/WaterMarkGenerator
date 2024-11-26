@@ -4,6 +4,9 @@ Only for Internal to generate the watermark header file.
 
 ## How to build
 
+First install the required packages.
+
+the following command will package the application into a single executable file.
 ```powershell
-pyinstaller -F -w -i .\favicon.ico --version-file .\.version .\WaterMarkGenerator.py
+python -m PyInstaller .\WaterMarkGenerator.spec
 ```

@@ -1,4 +1,4 @@
-import os
+import os, sys
 import tempfile
 
 
@@ -29,3 +29,10 @@ def load_last_opened_path():
     else:
         print("没有保存的最后打开路径")
         return os.getcwd()
+
+
+def getRealPath(s):
+    p = os.path.realpath(sys.path[0])
+    p = p.replace(r'\base_library.zip', '')
+    p = p + s
+    return p
