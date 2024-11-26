@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import QApplication, QVBoxLayout, QPushButton, QLineEdit, QHBoxLayout, \
     QWidget, QFileDialog, QMessageBox, QGroupBox, QSizePolicy, QSpacerItem
 
@@ -23,7 +23,8 @@ class MainWindow(QWidget):
         self.init()
 
     def init(self):
-        self.setWindowTitle("MTK 平台相机水印生成")
+        self.setWindowTitle("MTK 平台相机水印生成 > Build 241126")
+        self.setWindowIcon(QIcon("favicon.ico"))
         self.setWindowFlags(Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
 
         # 设置窗口大小

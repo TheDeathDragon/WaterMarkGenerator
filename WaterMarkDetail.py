@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QSlider, QPushButton, QLabel, QGroupBox, \
     QFileDialog, QMessageBox, QDialog
 
@@ -11,6 +11,7 @@ class DetailWindow(QDialog):
     def __init__(self, app, path):
         super().__init__()
         self.app = app
+        self.setWindowIcon(QIcon("favicon.ico"))
         self.setWindowFlags(Qt.WindowMinimizeButtonHint |
                             Qt.WindowMaximizeButtonHint |
                             Qt.WindowCloseButtonHint)
