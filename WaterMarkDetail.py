@@ -46,26 +46,36 @@ class DetailWindow(QDialog):
         self.value_label.setAlignment(Qt.AlignCenter)
         self.slider_layout.addWidget(self.value_label)
 
-        # 生成按钮
-        self.generate_button = QPushButton("生成水印文件")
-        self.generate_button.setFixedHeight(40)
-        self.generate_button.setFixedWidth(250)
-        self.generate_button.clicked.connect(self.on_generate_button_click)
-        self.button_layout.addWidget(self.generate_button)
+        # 切换背景颜色按钮
+        self.change_bg_button = QPushButton("切换预览背景")
+        self.change_bg_button.setFixedHeight(40)
+        self.change_bg_button.setFixedWidth(220)
+        self.change_bg_button.clicked.connect(self.on_change_bg_button_click)
+        self.button_layout.addWidget(self.change_bg_button)
+        self.current_bg_state = 0
+
         # 重新选择文件按钮
         self.reset_button = QPushButton("重新选择文件")
         self.reset_button.setFixedHeight(40)
-        self.reset_button.setFixedWidth(250)
+        self.reset_button.setFixedWidth(220)
         self.reset_button.clicked.connect(self.on_reset_button_click)
         self.button_layout.addWidget(self.reset_button)
+
+        # 生成按钮
+        self.generate_button = QPushButton("生成水印文件")
+        self.generate_button.setFixedHeight(40)
+        self.generate_button.setFixedWidth(220)
+        self.generate_button.clicked.connect(self.on_generate_button_click)
+        self.button_layout.addWidget(self.generate_button)
 
         # 图片预览组件
         self.image_preview = QLabel()
         self.image_preview.setPixmap(QPixmap(200, 150))  # 设置初始空白图片大小
-        self.image_preview.setScaledContents(True)
+        self.image_preview.setScaledContents(False)
         self.image_preview.setAlignment(Qt.AlignCenter)
         self.image_preview.setStyleSheet("background-color: black;")
         self.image_layout.addWidget(self.image_preview)
+        self.color_index = 0
 
         # 将滑块和按钮的布局加入 GroupBox
         config_group_box = QGroupBox("水印配置")
@@ -87,7 +97,6 @@ class DetailWindow(QDialog):
         self.setLayout(self.main_layout)
         self.draw_preview_image(self.slider.value())
 
-
     def slider_value_changed(self, value):
         # 滑块值改变时更新标签
         self.value_label.setText("阈值： " + str(value) + "%")
@@ -103,17 +112,25 @@ class DetailWindow(QDialog):
         self.open_log_folder()
         self.reset_button.setEnabled(True)
 
+    def change_color(self):
+        colors = ["#FF0000", "#00FF00", "#0000FF", "#D3D3D3", "#A9A9A9", "#FFFFFF", "#000000"]
+        self.image_preview.setStyleSheet(f"background-color: {colors[self.color_index]};")
+        self.image_preview.repaint()
+        self.color_index = (self.color_index + 1) % len(colors)
+
+    def on_change_bg_button_click(self):
+        self.change_color()
+
     def open_log_folder(self):
         dir_path = self.path[:self.path.rfind('/')]
         image_path, _ = QFileDialog.getOpenFileName(self, "选择黑底白字图片", dir_path, "Images (*.png)")
-        if image_path:
-            if WaterMarkUtil.verify_image(image_path) is False:
-                self.show_error_message("请选择正确的图片路径")
-                return
-            self.setWindowTitle("当前路径 > " + image_path)
-            self.path = image_path
-            self.draw_preview_image(self.slider.value())
-            save_last_opened_path(image_path)
+        if not image_path or WaterMarkUtil.verify_image(image_path) is False:
+            self.show_error_message("请选择正确的图片路径")
+            return
+        self.setWindowTitle("当前路径 > " + image_path)
+        self.path = image_path
+        self.draw_preview_image(self.slider.value())
+        save_last_opened_path(image_path)
 
     def draw_preview_image(self, value):
         # 绘制预览图片
