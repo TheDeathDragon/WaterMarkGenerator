@@ -105,10 +105,15 @@ class DetailWindow(QDialog):
 
     def open_log_folder(self):
         dir_path = self.path[:self.path.rfind('/')]
-        folder_path, _ = QFileDialog.getOpenFileName(self, "选择黑底白字图片", dir_path, "Images (*.png)")
-        if folder_path:
-            self.setWindowTitle("当前路径 > " + folder_path)
-            save_last_opened_path(folder_path)
+        image_path, _ = QFileDialog.getOpenFileName(self, "选择黑底白字图片", dir_path, "Images (*.png)")
+        if image_path:
+            if WaterMarkUtil.verify_image(image_path) is False:
+                self.show_error_message("请选择正确的图片路径")
+                return
+            self.setWindowTitle("当前路径 > " + image_path)
+            self.path = image_path
+            self.draw_preview_image(self.slider.value())
+            save_last_opened_path(image_path)
 
     def draw_preview_image(self, value):
         # 绘制预览图片
